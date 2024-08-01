@@ -1,7 +1,7 @@
 # Start with the base Alpine image
 FROM alpine:latest
 
-# Install required packages for building NGINX and the module
+# Install required packages for building NGINX and the module, and also install gettext for envsubst
 RUN apk add --no-cache \
     build-base \
     pcre-dev \
@@ -11,7 +11,8 @@ RUN apk add --no-cache \
     tar \
     gzip \
     bash \
-    unzip
+    unzip \
+    gettext
 
 # Set environment variable for NGINX version
 ENV NGINX_VERSION 1.25.5
@@ -34,6 +35,9 @@ RUN cd nginx-$NGINX_VERSION && \
 # Clean up unnecessary packages and files
 RUN apk del build-base wget tar gzip unzip && \
     rm -rf /var/cache/apk/* /nginx-$NGINX_VERSION /nginx-$NGINX_VERSION.tar.gz /master.zip
+
+# Install nginx to ensure the command is available
+RUN apk add --no-cache nginx
 
 # Default command
 CMD ["nginx", "-g", "daemon off;"]
