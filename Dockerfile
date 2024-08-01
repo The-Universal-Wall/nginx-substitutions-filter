@@ -32,6 +32,10 @@ RUN cd nginx-$NGINX_VERSION && \
     make && \
     make install
 
+# Move the module to the appropriate directory
+RUN mkdir -p /etc/nginx/modules && \
+    cp objs/ngx_http_substitutions_filter_module.so /etc/nginx/modules/
+
 # Clean up unnecessary packages and files
 RUN apk del build-base wget tar gzip unzip && \
     rm -rf /var/cache/apk/* /nginx-$NGINX_VERSION /nginx-$NGINX_VERSION.tar.gz /master.zip
