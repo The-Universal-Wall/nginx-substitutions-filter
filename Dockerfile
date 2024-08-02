@@ -5,8 +5,7 @@ FROM alpine:latest
 ARG NGINX_VERSION=1.27.0
 
 # Install necessary packages
-RUN apk update && \
-    apk add --no-cache wget git gcc make g++ zlib-dev linux-headers pcre-dev openssl-dev
+RUN apk add --no-cache wget git gcc make g++ zlib-dev linux-headers pcre-dev openssl-dev
 
 # Download and extract Nginx
 RUN cd /opt && \
@@ -18,7 +17,7 @@ RUN git clone https://github.com/yaoweibin/ngx_http_substitutions_filter_module.
 
 # Build and install Nginx with the custom module
 RUN cd /opt/nginx-${NGINX_VERSION} && \
-    ./configure --add-module=/opt/ngx_http_substitutions_filter_module/ && \
+    ./configure --with-http_ssl_module --add-module=/opt/ngx_http_substitutions_filter_module/ && \
     make && \
     make install
 
